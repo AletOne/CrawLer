@@ -6,6 +6,9 @@ import java.util.Set;
 
 import org.htmlparser.tags.ImageTag;
 
+import com.sun.corba.se.spi.orbutil.threadpool.NoSuchWorkQueueException;
+import com.wang.util.HtmlUtil;
+
 public class ImageCrawler {
 
 	/**
@@ -38,29 +41,61 @@ public class ImageCrawler {
 			if (visitUrl == null){
 				continue;
 			}
-			DownloadFile downloadFile = new DownloadFile();
 			
-			LinkedList<ImageTag> tags = HtmlParserTool.getImgTags(visitUrl);
-			for (ImageTag tag : tags){
-				System.out.println("---Print image url---");
-				String url = tag.getImageURL();
-				System.out.println(url);
-				if (!url.startsWith("http")){
-					url = visitUrl+url;
+			DownloadFile downloadFile  = new DownloadFile();
+			//获取url的内容
+			String content = HtmlUtil.getHtml(visitUrl);
+			System.out.println(content);
+			
+			//获取图片链接
+			Set<String> imgUrls = HtmlUtil.getImgUrls(content);
+			
+			
+			for (String img : imgUrls){
+				System.out.println("------Print img url-------");
+				if (!img.startsWith("http")){
+					img = visitUrl + img;
 				}
-				if (url != null && url.startsWith("http") && !url.equals("")){
-					downloadFile.downloadFile(url);
+				
+				if (img != null && img.startsWith("http") && !img.equals("")){
+					downloadFile.downloadFile(img, "img/");
 				}
+				
 			}
 			
-//			LinkQueue.addVisitedUrl(visitUrl);
+//			DownloadFile downloadFile = new DownloadFile();
 //			
-//			Set<String> links = HtmlParserTool.extractLinks(visitUrl, filter);
-//			for (String link : links){
-//				System.out.println("print links");
-//				System.out.println(link);
-//				LinkQueue.addUnVisitedUrl(link);
+//			//先将url的网页文件内容下载到本地，得到本地的文件url
+//			String parsedUrl = downloadFile.downloadFile(visitUrl, "temp/");
+//			
+//			//解析本地的文件
+//			//测试能否得到动态生成的网页内容
+//			LinkedList<ImageTag> tags = HtmlParserTool.getImgTags(parsedUrl);
+//			for (ImageTag tag : tags){
+//				System.out.println("---Print image url---");
+//				String url = tag.getImageURL();
+//				System.out.println(url);
+//				if (!url.startsWith("http")){
+//					url = visitUrl+url;
+//				}
+//				if (url != null && url.startsWith("http") && !url.equals("")){
+//					downloadFile.downloadFile(url,"img/");
+//				}
 //			}
+			
+			
+			
+			
+			
+			
+			LinkQueue.addVisitedUrl(visitUrl);
+			
+			Set<String> links = HtmlParserTool.extractLinks(visitUrl, filter);
+			for (String link : links){
+				System.out.println("print links");
+				System.out.println(link);
+				LinkQueue.addUnVisitedUrl(link);
+			}
 		}
 	}
 }
