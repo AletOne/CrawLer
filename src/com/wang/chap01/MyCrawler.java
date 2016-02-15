@@ -35,7 +35,7 @@ public class MyCrawler {
 				continue;
 			}
 			DownloadFile downloadFile = new DownloadFile();
-			downloadFile.downloadFile(visitUrl);
+			downloadFile.downloadFile(visitUrl, "temp/");
 			LinkQueue.addVisitedUrl(visitUrl);
 			
 			Set<String> links = HtmlParserTool.extractLinks(visitUrl, filter);
