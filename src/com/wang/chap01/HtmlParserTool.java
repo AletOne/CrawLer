@@ -1,9 +1,15 @@
 package com.wang.chap01;
 
+//经过实验，htmlparser对html的解析有问题，无法解析出所有的img标签，故需要舍弃这种用法。可能还是需要使用正则表达式。
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -99,8 +105,6 @@ public class HtmlParserTool {
 		}
 		return imgUrls;
 	}
+
 	
-//	public static Set<String> getImgUrls(Set<ImageTag> tags){
-//		Set<String> urls = 
-//	}
 }
