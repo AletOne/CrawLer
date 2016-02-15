@@ -61,7 +61,7 @@ public class DownloadFile {
 		}
 	}
 	
-	public String downloadFile(String url) {
+	public String downloadFile(String url, String name) {
 		System.out.println("DownloadFile.downloadFile()");
 		System.out.println(url);
 		String filePath = null;
@@ -70,7 +70,13 @@ public class DownloadFile {
 		//设置http超时5秒
 		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
 		//2.生成getmethod对象并设置参数
-		GetMethod getMethod = new GetMethod(url);
+		GetMethod getMethod;
+		try {
+			getMethod = new GetMethod(url);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
 		//设置超时5秒
 		getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 10000);
 		//设置请求重试处理
@@ -93,7 +99,7 @@ public class DownloadFile {
 //				sb.append(result);
 //			}
 			
-			filePath = "temp/" + getFileNameByUrl(url, getMethod.getResponseHeader("Content-Type").getValue());
+			filePath = name + getFileNameByUrl(url, getMethod.getResponseHeader("Content-Type").getValue());
 			saveToLocal(IOUtil.toByteArray(inputStream), filePath);
 		} catch (HttpException e) {
 			// TODO: handle exception
