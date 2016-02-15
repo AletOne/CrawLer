@@ -95,6 +95,8 @@ public class ImageCrawler {
 				System.out.println("print links");
 				System.out.println(link);
 				LinkQueue.addUnVisitedUrl(link);
+				
+				//seff
 			}
 		}
 	}
